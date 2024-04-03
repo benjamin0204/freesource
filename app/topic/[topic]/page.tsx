@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { getResourcesBySubtopic, getDescriptionBySubtopic } from "@/lib/utils";
+import { IResource } from "@/types/topics";
 
 export default function Page({ params }: { params: { topic: string } }) {
   const topic = data.topics.find(
@@ -38,7 +39,7 @@ export default function Page({ params }: { params: { topic: string } }) {
           );
         })}
         {resources?.map((item, index) => {
-          return <Resource resource={item} />;
+          return <Resource key={index} resource={item} />;
         })}
       </section>
     </section>
