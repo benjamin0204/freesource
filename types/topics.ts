@@ -1,25 +1,23 @@
-export interface TopicsData {
-  topics: ITopic[];
-}
-export interface IResource {
-  type: string;
-  name: string;
-  link: string;
-  seniority_level: string;
-}
-
-export interface ISubtopic {
-  name: string;
-  description: string;
-  resources?: IResource[];
-}
-
 export interface ITopic {
+  id: string;
+  created_at: Date;
+  created_by: string;
   name: string;
   description: string;
   subtopics: ISubtopic[];
 }
-
-export interface ITopicsData {
-  topics: ITopic[];
+export interface ISubtopic {
+  id: string;
+  created_at: Date;
+  created_by: string;
+  name: string;
+  description: string;
+  resources?: IResource[];
+}
+export interface IResource {
+  id: string;
+  name: string;
+  type: string;
+  link: string;
+  skill_level: string;
 }
