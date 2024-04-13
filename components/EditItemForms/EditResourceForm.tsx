@@ -40,6 +40,7 @@ const formSchema = z.object({
   link: z.string(),
   skill_level: z.string(),
   id: z.string(),
+  created_by: z.string(),
 });
 
 type Props = {
@@ -58,6 +59,7 @@ export const EditResourceForm = ({ resource }: Props) => {
       link: resource.link,
       skill_level: resource.skill_level,
       id: resource.id,
+      created_by: resource.created_by,
     },
   });
 
@@ -65,18 +67,17 @@ export const EditResourceForm = ({ resource }: Props) => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    const { data, error } = await findResourceByIdAndUpdate(values);
-    if (data) {
-      toast({
-        className: "border border-sky-400",
-        title: `Updated ${resource.name}!`,
-      });
-    }
+    const { error } = await findResourceByIdAndUpdate(values);
     if (error) {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
         description: error.message,
+      });
+    } else {
+      toast({
+        className: "border border-sky-400",
+        title: `Updated ${resource.name}!`,
       });
     }
     router.refresh();

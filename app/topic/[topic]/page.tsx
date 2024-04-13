@@ -5,7 +5,7 @@ import { findTopicsByName } from "@/actions/Topics";
 import { findSubTopicsByTopicId } from "@/actions/SubTopic";
 
 export default async function Page({ params }: { params: { topic: string } }) {
-  const readableTopic = params.topic.replace("%20", " ");
+  const readableTopic = params.topic.replaceAll("%20", " ");
 
   const { data: topic, error: topicError } = await findTopicsByName(
     readableTopic

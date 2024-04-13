@@ -5,16 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
 import {
   Dialog,
   DialogClose,
@@ -54,7 +45,7 @@ export const DeleteSubtopicForm = ({ subtopic }: Props) => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    const { error } = await findSubtopicByIdAndDelete(values);
+    const { error } = await findSubtopicByIdAndDelete(subtopic);
     toast({
       className: "border border-sky-400",
       title: `Deleted ${subtopic.name}!`,

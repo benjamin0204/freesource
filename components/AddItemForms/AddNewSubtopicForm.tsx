@@ -23,6 +23,7 @@ import { AddNewSubtopic } from "@/actions/SubTopic";
 import { AddNewCard } from "./AddNewCard";
 import { AddNewDialogHeader } from "./AddNewDialog/AddNewDialogHeader";
 import { Textarea } from "../ui/textarea";
+import { useUser } from "@clerk/nextjs";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -40,6 +41,8 @@ type Props = {
 };
 
 export const AddNewSubtopicForm = ({ topic }: Props) => {
+  const { user } = useUser();
+
   const { toast } = useToast();
   const router = useRouter();
   // 1. Define your form.
@@ -55,10 +58,12 @@ export const AddNewSubtopicForm = ({ topic }: Props) => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!user) return;
+
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     values.topic_id = topic.id;
-    values.created_by = "Ben Rogers"; // Fix later date
+    values.created_by = user.id;
     const { data, error } = await AddNewSubtopic(values);
     if (data) {
       toast({
@@ -81,7 +86,7 @@ export const AddNewSubtopicForm = ({ topic }: Props) => {
       <AddNewCard />
       <DialogContent className="sm:max-w-md">
         <AddNewDialogHeader
-          header={topic?.name?.replace("%20", " ")}
+          header={topic?.name?.replaceAll("%20", " ")}
           subHeader={"Add a Subtopic? "}
         />
         <div className="flex items-center space-x-2">

@@ -22,6 +22,7 @@ import { ISubtopic } from "@/types/topics";
 import { AddNewResource } from "@/actions/Resources";
 import { AddNewCard } from "./AddNewCard";
 import { AddNewDialogHeader } from "./AddNewDialog/AddNewDialogHeader";
+import { useUser } from "@clerk/nextjs";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -38,6 +39,7 @@ const formSchema = z.object({
     message: "Description must be at least 2 characters.",
   }),
   subtopic_id: z.string(),
+  created_by: z.string(),
 });
 
 type Props = {
@@ -45,6 +47,8 @@ type Props = {
 };
 
 export const AddNewResourceForm = ({ subtopic }: Props) => {
+  const { user } = useUser();
+
   const { toast } = useToast();
   const router = useRouter();
   // 1. Define your form.
@@ -55,15 +59,17 @@ export const AddNewResourceForm = ({ subtopic }: Props) => {
       type: "",
       link: "",
       skill_level: "",
-      subtopic_id: "",
+      subtopic_id: subtopic.id,
+      created_by: "",
     },
   });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!user) return;
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    values.subtopic_id = subtopic.id;
+    values.created_by = user.id;
     const { data, error } = await AddNewResource(values);
     if (data) {
       toast({
@@ -85,7 +91,7 @@ export const AddNewResourceForm = ({ subtopic }: Props) => {
       <AddNewCard />
       <DialogContent className="sm:max-w-md">
         <AddNewDialogHeader
-          header={subtopic?.name?.replace("%20", " ")}
+          header={subtopic?.name?.replaceAll("%20", " ")}
           subHeader={"Add a resource?"}
         />
 

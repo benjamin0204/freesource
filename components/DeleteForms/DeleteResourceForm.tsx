@@ -45,7 +45,7 @@ export const DeleteResourceForm = ({ resource }: Props) => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    const { error } = await findResourceByIdAndDelete(values);
+    const { error } = await findResourceByIdAndDelete(resource);
     toast({
       className: "border border-sky-400",
       title: `Deleted ${resource.name}!`,

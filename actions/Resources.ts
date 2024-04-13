@@ -1,6 +1,8 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { auth, useAuth, useUser } from "@clerk/nextjs";
+import { getAuth } from "@clerk/nextjs/server";
 import { cookies } from "next/headers";
 
 type FormData = {
@@ -9,7 +11,8 @@ type FormData = {
   type: string;
   link: string;
   skill_level: string;
-  subtopic_id: string;
+  subtopic_id?: string;
+  created_by: string;
 };
 
 export const AddNewResource = async (formData: FormData) => {
@@ -30,6 +33,10 @@ export const findresourcesBySubtopicId = async (
 };
 
 export const findResourceByIdAndUpdate = async (formData: FormData) => {
+  const { userId } = auth();
+  if (formData.created_by !== userId) {
+    return { error: { message: "You don't have permission to do that" } };
+  }
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
   return await supabase
@@ -39,8 +46,12 @@ export const findResourceByIdAndUpdate = async (formData: FormData) => {
     .select();
 };
 
-export const findResourceByIdAndDelete = async ({ id }: { id: string }) => {
+export const findResourceByIdAndDelete = async (formData: FormData) => {
+  const { userId } = auth();
+  if (formData.created_by !== userId) {
+    return { error: { message: "You don't have permission to do that" } };
+  }
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
-  return await supabase.from("resources").delete().eq("id", id);
+  return await supabase.from("resources").delete().eq("id", formData.id);
 };

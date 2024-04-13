@@ -22,6 +22,7 @@ import { AddNewCard } from "./AddNewCard";
 import { AddNewDialogHeader } from "./AddNewDialog/AddNewDialogHeader";
 import { AddNewTopic } from "@/actions/Topics";
 import { Textarea } from "../ui/textarea";
+import { useUser } from "@clerk/nextjs";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -30,8 +31,11 @@ const formSchema = z.object({
   description: z.string().min(2, {
     message: "Description must be at least 2 characters.",
   }),
+  created_by: z.string(),
 });
 export const AddNewTopicForm = () => {
+  const { user } = useUser();
+
   const { toast } = useToast();
   const router = useRouter();
   // 1. Define your form.
@@ -40,13 +44,17 @@ export const AddNewTopicForm = () => {
     defaultValues: {
       name: "",
       description: "",
+      created_by: "",
     },
   });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!user) return;
+
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    values.created_by = user.id;
     const { data, error } = await AddNewTopic(values);
     if (error) console.error(error);
     if (data) {

@@ -20,7 +20,7 @@ export const BreadCrumb = () => {
           {list.map((item, index) => {
             const isLast = index === list.length - 1;
             const href = `/${list.slice(0, index + 1).join("/")}`;
-            item = item.replace("%20", " ");
+            item = item.replaceAll("%20", " ");
 
             return (
               <>

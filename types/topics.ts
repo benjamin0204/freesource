@@ -16,6 +16,7 @@ export interface ISubtopic {
 }
 export interface IResource {
   id: string;
+  created_by: string;
   name: string;
   type: string;
   link: string;

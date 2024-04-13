@@ -56,7 +56,7 @@ export const DeleteTopicForm = ({ topic }: Props) => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    const { error } = await findTopicByIdAndDelete(values);
+    const { error } = await findTopicByIdAndDelete(topic);
     toast({
       className: "border border-sky-400",
       title: `Deleted ${topic.name}!`,

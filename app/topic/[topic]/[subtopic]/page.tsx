@@ -10,9 +10,8 @@ export default async function Page({
   params: { subtopic: string; topic: string };
 }) {
   const { data: subtopic, error: subtopicError } = await findSubtopicByName(
-    params.subtopic.replace("%20", " ")
+    params.subtopic.replaceAll("%20", " ")
   );
-
   const { data: resources, error: resourcesError } =
     await findresourcesBySubtopicId(subtopic?.id);
 
@@ -34,7 +33,7 @@ export default async function Page({
         {resources?.map((resource, index) => {
           return <ResourceCard key={index} resource={resource} />;
         })}
-        <AddNewResourceForm subtopic={subtopic} />
+        {subtopic && <AddNewResourceForm subtopic={subtopic} />}
       </section>
     </section>
   );

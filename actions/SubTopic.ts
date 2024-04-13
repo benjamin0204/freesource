@@ -1,12 +1,14 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { auth } from "@clerk/nextjs";
 import { cookies } from "next/headers";
 
 type FormData = {
   name: string;
   description: string;
   id?: string;
+  created_by: string;
 };
 
 export const AddNewSubtopic = async (formData: FormData) => {
@@ -32,6 +34,11 @@ export const findSubTopicsByTopicId = async (topicId: string | number) => {
 };
 
 export const findSubtopicByIdAndUpdate = async (formData: FormData) => {
+  const { userId } = auth();
+
+  if (formData.created_by !== userId) {
+    return { error: { message: "You don't have permission to do that" } };
+  }
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
   return await supabase
@@ -41,8 +48,12 @@ export const findSubtopicByIdAndUpdate = async (formData: FormData) => {
     .select();
 };
 
-export const findSubtopicByIdAndDelete = async ({ id }: { id: string }) => {
+export const findSubtopicByIdAndDelete = async (formData: FormData) => {
+  const { userId } = auth();
+  if (formData.created_by !== userId) {
+    return { error: { message: "You don't have permission to do that" } };
+  }
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
-  return await supabase.from("subTopics").delete().eq("id", id);
+  return await supabase.from("subTopics").delete().eq("id", formData.id);
 };

@@ -38,6 +38,7 @@ const formSchema = z.object({
     message: "Description must be at least 2 characters.",
   }),
   id: z.string(),
+  created_by: z.string(),
 });
 
 type Props = {
@@ -54,6 +55,7 @@ export const EditTopicForm = ({ topic }: Props) => {
       name: topic.name,
       description: topic.description,
       id: topic.id,
+      created_by: topic.created_by,
     },
   });
 
@@ -61,18 +63,17 @@ export const EditTopicForm = ({ topic }: Props) => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    const { data, error } = await findTopicByIdAndUpdate(values);
-    if (data) {
-      toast({
-        className: "border border-sky-400",
-        title: `Updated ${topic.name}!`,
-      });
-    }
+    const { error } = await findTopicByIdAndUpdate(values);
     if (error) {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
         description: error.message,
+      });
+    } else {
+      toast({
+        className: "border border-sky-400",
+        title: `Updated ${topic.name}!`,
       });
     }
     router.refresh();
