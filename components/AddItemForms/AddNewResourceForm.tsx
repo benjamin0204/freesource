@@ -124,7 +124,7 @@ export const AddNewResourceForm = ({ subtopic }: Props) => {
                       <Input placeholder="Documentation" {...field} />
                     </FormControl>
                     <FormDescription>
-                      This is the type of resource you're adding
+                      This is the type of resource you&apos;re adding
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

@@ -13,7 +13,7 @@ import { DeleteSubtopicForm } from "../DeleteForms/DeleteSubtopicForm";
 
 type ItemCardProps = {
   item: ITopic | ISubtopic;
-  topicName: string;
+  topicName?: string;
 };
 
 export const ItemCard = ({ item, topicName }: ItemCardProps) => {
