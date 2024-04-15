@@ -55,3 +55,16 @@ export const findResourceByIdAndDelete = async (formData: FormData) => {
   const supabase = createClient(cookieStore);
   return await supabase.from("resources").delete().eq("id", formData.id);
 };
+
+export const searchForResources = async (input: string) => {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+  return await supabase
+    .from("resources")
+    .select(
+      `*,
+        subTopics (*)
+      `
+    )
+    .textSearch("name", input);
+};

@@ -3,6 +3,7 @@ import { TopicCard } from "@/components/ItemCards/TopicCard";
 
 import { getData } from "@/actions/Fetch";
 import { AddNewTopicForm } from "@/components/AddItemForms/AddNewTopicForm";
+import { SearchBar } from "@/components/SearchBar";
 
 export default async function Home() {
   const data = await getData("topics");
@@ -25,6 +26,7 @@ export default async function Home() {
           </p>
         </div>
       </div>
+      <SearchBar />
       <h2 className="text-3xl font-extrabold leading-tight tracking-tighter">
         <Title text={"Topics"} />
       </h2>
