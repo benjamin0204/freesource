@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Title } from "./Title";
 import { useCallback, useEffect, useState } from "react";
 import { searchForResources } from "@/actions/Resources";
-import { IResource } from "@/types/topics";
+import { IResource, ISubtopic } from "@/types/topics";
 import { useToast } from "./ui/use-toast";
 import Link from "next/link";
 import {
@@ -15,9 +15,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
+type OutputValues = IResource & { subTopics: ISubtopic };
 export const SearchBar = () => {
   const [inputValue, setInputValue] = useState("");
-  const [outputValues, setOutputValues] = useState([] as any);
+  const [outputValues, setOutputValues] = useState([] as OutputValues[]);
   const { toast } = useToast();
 
   const fetcher = useCallback(async (input: string) => {
@@ -37,11 +39,9 @@ export const SearchBar = () => {
     if (inputValue.length > 0) {
       fetcher(inputValue);
     }
-
-    console.log(outputValues);
   }, [inputValue]);
 
-  const handleChange = (event) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setInputValue(value);
   };
@@ -69,8 +69,8 @@ export const SearchBar = () => {
                 <TableHead className="text-right">Subtopic</TableHead>
               </TableRow>
             </TableHeader>
-            {outputValues.map((item) => (
-              <TableBody>
+            {outputValues.map((item, index) => (
+              <TableBody key={index}>
                 <TableRow>
                   <Link href={item.link} target="_blank">
                     <TableCell className="font-medium">{item.name}</TableCell>
