@@ -21,4 +21,5 @@ export interface IResource {
   type: string;
   link: string;
   skill_level: string;
+  favourited_by: string[];
 }

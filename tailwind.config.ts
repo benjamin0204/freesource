@@ -19,6 +19,9 @@ const config = {
       },
     },
     extend: {
+      transitionDelay: {
+        "1300": "1300ms",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

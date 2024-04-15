@@ -1,12 +1,15 @@
 import { Title } from "@/components/Title";
 import { TopicCard } from "@/components/ItemCards/TopicCard";
 
-import { getData } from "@/actions/Fetch";
+import { getData, getFavourites } from "@/actions/Fetch";
 import { AddNewTopicForm } from "@/components/AddItemForms/AddNewTopicForm";
 import { SearchBar } from "@/components/SearchBar";
+import { ResourceCard } from "@/components/ItemCards/ResourceCard";
+import { IResource } from "@/types/topics";
 
 export default async function Home() {
   const data = await getData("topics");
+  const favourites = (await getFavourites()) as IResource[];
 
   return (
     <section className="container grid items-center gap-6 pb-8 mt-24 md:py-10">
@@ -36,6 +39,18 @@ export default async function Home() {
         })}
         <AddNewTopicForm />
       </section>
+      {favourites.length > 0 && (
+        <>
+          <h2 className="text-3xl font-extrabold leading-tight tracking-tighter">
+            <Title text={"Favourites"} />
+          </h2>
+          <section className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+            {favourites?.map((resource, index) => {
+              return <ResourceCard key={index} resource={resource} />;
+            })}
+          </section>
+        </>
+      )}
 
       {/* <h2 className="text-3xl font-extrabold leading-tight tracking-tighter">
         <Title text={"Pathways"} />

@@ -68,3 +68,53 @@ export const searchForResources = async (input: string) => {
     )
     .textSearch("name", input);
 };
+
+export const favouriteResourceById = async (id: string) => {
+  const { userId } = auth();
+  if (!userId) {
+    return { success: false, message: "You need to be logged in to do that!" };
+  }
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+  // Retrieve the current array from the database
+  const { data: currentData, error } = await supabase
+    .from("resources")
+    .select("favourited_by, created_by")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error("Error retrieving current data:", error.message);
+    return { success: false, message: error.message };
+  }
+
+  const currentFavourites = currentData ? currentData.favourited_by || [] : [];
+  let updatedFavourites;
+  if (currentFavourites.includes(userId)) {
+    // remove value from array ( un favourite )
+    const index = currentFavourites.indexOf(userId);
+    if (index !== -1) {
+      currentFavourites.splice(index, 1);
+    }
+    updatedFavourites = currentFavourites;
+  } else {
+    // Modify the array by adding the new userId
+    updatedFavourites = [...currentFavourites, userId];
+  }
+
+  const createdBy = currentData ? currentData.created_by : null;
+
+  // Upsert the modified array back into the database
+  const { data: updatedData, error: upsertError } = await supabase
+    .from("resources")
+    .upsert({ id, favourited_by: updatedFavourites, created_by: createdBy })
+    .eq("id", id)
+    .select();
+
+  if (upsertError) {
+    console.error("Error upserting data:", upsertError.message);
+    return { success: false, message: upsertError.message };
+  }
+
+  return { success: true };
+};
