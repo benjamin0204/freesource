@@ -3,8 +3,9 @@ import { Separator } from "@/components/ui/separator";
 import { ITopic } from "@/types/topics";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { EditTopicForm } from "../EditItemForms/EditTopicForm";
-import { DeleteTopicForm } from "../DeleteForms/DeleteTopicForm";
+import { EditTopicForm } from "./EditTopicForm";
+import { DeleteTopicForm } from "./DeleteTopicForm";
+import { Skeleton } from "../../ui/skeleton";
 
 type TopicCardProps = {
   item: ITopic;
@@ -35,6 +36,14 @@ export const TopicCard = ({ item }: TopicCardProps) => {
           </div>
         </Card>
       </div>
+    </div>
+  );
+};
+
+export const TopicCardSkeleton = () => {
+  return (
+    <div className="flex flex-col space-y-3 min-h-44 h-full">
+      <Skeleton className=" w-full h-full rounded-xl" />
     </div>
   );
 };

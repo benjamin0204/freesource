@@ -1,22 +1,18 @@
-import { findresourcesBySubtopicId } from "@/actions/Resources";
 import { findSubtopicByName } from "@/actions/SubTopic";
 import { AddNewResourceForm } from "@/components/AddItemForms/AddNewResourceForm";
-import { ResourceCard } from "@/components/ItemCards/ResourceCard";
+import { ResourceCardList } from "@/components/Cards/Resources/FavouriteCardList";
+import { ItemCardSkeleton } from "@/components/Cards/Subtopics/ItemCard";
 import { Title } from "@/components/Title";
+import { Suspense } from "react";
 
 export default async function Page({
   params,
 }: {
   params: { subtopic: string; topic: string };
 }) {
-  const { data: subtopic, error: subtopicError } = await findSubtopicByName(
+  const { data: subtopic } = await findSubtopicByName(
     params.subtopic.replaceAll("%20", " ")
   );
-  const { data: resources, error: resourcesError } =
-    await findresourcesBySubtopicId(subtopic?.id);
-
-  if (subtopicError || resourcesError)
-    console.error("error", subtopicError || resourcesError);
 
   return (
     <section className="container grid items-center gap-6 pb-8 mt-8">
@@ -30,9 +26,10 @@ export default async function Page({
         <Title text={"Resources"} />
       </h2>
       <section className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-        {resources?.map((resource, index) => {
-          return <ResourceCard key={index} resource={resource} />;
-        })}
+        <Suspense fallback={<ItemCardSkeleton />}>
+          <ResourceCardList id={subtopic?.id} />
+        </Suspense>
+
         {subtopic && <AddNewResourceForm subtopic={subtopic} />}
       </section>
     </section>

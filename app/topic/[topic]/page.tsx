@@ -1,8 +1,13 @@
 import { Title } from "@/components/Title";
-import { ItemCard } from "@/components/ItemCards/ItemCard";
 import { AddNewSubtopicForm } from "@/components/AddItemForms/AddNewSubtopicForm";
 import { findTopicsByName } from "@/actions/Topics";
 import { findSubTopicsByTopicId } from "@/actions/SubTopic";
+import {
+  ItemCard,
+  ItemCardSkeleton,
+} from "@/components/Cards/Subtopics/ItemCard";
+import { SubtopicCardList } from "@/components/Cards/Subtopics/SubtopicCardList";
+import { Suspense } from "react";
 
 export default async function Page({ params }: { params: { topic: string } }) {
   const readableTopic = params.topic.replaceAll("%20", " ");
@@ -10,13 +15,6 @@ export default async function Page({ params }: { params: { topic: string } }) {
   const { data: topic, error: topicError } = await findTopicsByName(
     readableTopic
   );
-
-  const { data: subTopics, error: subTopicError } =
-    await findSubTopicsByTopicId(topic.id);
-
-  if (topicError || subTopicError)
-    console.error("error", topicError || subTopicError);
-
   return (
     <section className="container grid items-center gap-6 pb-8 mt-8">
       <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
@@ -24,11 +22,9 @@ export default async function Page({ params }: { params: { topic: string } }) {
       </h1>
       <p>{topic.description}</p>
       <section className="mt-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-        {subTopics?.map((item, index) => {
-          return <ItemCard key={index} item={item} topicName={params.topic} />;
-        })}
-
-        <AddNewSubtopicForm topic={topic} />
+        <Suspense fallback={<ItemCardSkeleton />}>
+          <SubtopicCardList topic={topic} />
+        </Suspense>
       </section>
     </section>
   );

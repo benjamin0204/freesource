@@ -23,8 +23,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import { useToast } from "../ui/use-toast";
+} from "../../ui/dialog";
+import { useToast } from "../../ui/use-toast";
 import { useRouter } from "next/navigation";
 import { ITopic } from "@/types/topics";
 import { Trash2 } from "lucide-react";

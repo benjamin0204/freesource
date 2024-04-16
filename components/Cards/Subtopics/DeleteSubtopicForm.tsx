@@ -14,30 +14,30 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import { useToast } from "../ui/use-toast";
+} from "../../ui/dialog";
+import { useToast } from "../../ui/use-toast";
 import { useRouter } from "next/navigation";
-import { IResource } from "@/types/topics";
+import { ISubtopic } from "@/types/topics";
 import { Trash2 } from "lucide-react";
 
-import { findResourceByIdAndDelete } from "@/actions/Resources";
+import { findSubtopicByIdAndDelete } from "@/actions/SubTopic";
 
 const formSchema = z.object({
   id: z.string(),
 });
 
 type Props = {
-  resource: IResource;
+  subtopic: ISubtopic;
 };
 
-export const DeleteResourceForm = ({ resource }: Props) => {
+export const DeleteSubtopicForm = ({ subtopic }: Props) => {
   const { toast } = useToast();
   const router = useRouter();
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      id: resource.id,
+      id: subtopic.id,
     },
   });
 
@@ -45,10 +45,10 @@ export const DeleteResourceForm = ({ resource }: Props) => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    const { error } = await findResourceByIdAndDelete(resource);
+    const { error } = await findSubtopicByIdAndDelete(subtopic);
     toast({
       className: "border border-sky-400",
-      title: `Deleted ${resource.name}!`,
+      title: `Deleted ${subtopic.name}!`,
     });
     if (error) {
       toast({
@@ -67,9 +67,9 @@ export const DeleteResourceForm = ({ resource }: Props) => {
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Delete - {resource.name}</DialogTitle>
+          <DialogTitle>Delete - {subtopic.name}</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete this resource?{" "}
+            Are you sure you want to delete this subtopic?{" "}
           </DialogDescription>
         </DialogHeader>
         <div className="flex items-center space-x-2">

@@ -7,10 +7,11 @@ import {
 } from "@/components/ui/card";
 import { IResource } from "@/types/topics";
 import Link from "next/link";
-import { EditResourceForm } from "../EditItemForms/EditResourceForm";
-import { DeleteResourceForm } from "../DeleteForms/DeleteResourceForm";
+import { EditResourceForm } from "./EditResourceForm";
+import { DeleteResourceForm } from "./DeleteResourceForm";
 import { FavouriteResourceIcon } from "./FavouriteResourceIcon";
 import { auth } from "@clerk/nextjs";
+import { Skeleton } from "../../ui/skeleton";
 
 type Props = {
   resource: IResource;
@@ -48,6 +49,14 @@ export const ResourceCard = ({ resource }: Props) => {
           <CardFooter>{resource.type}</CardFooter>
         </Card>
       </div>
+    </div>
+  );
+};
+
+export const ResourceCardSkeleton = () => {
+  return (
+    <div className="flex flex-col space-y-3 min-h-40 h-full">
+      <Skeleton className=" w-full h-full rounded-xl" />
     </div>
   );
 };

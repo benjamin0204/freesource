@@ -14,30 +14,30 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import { useToast } from "../ui/use-toast";
+} from "../../ui/dialog";
+import { useToast } from "../../ui/use-toast";
 import { useRouter } from "next/navigation";
-import { ISubtopic } from "@/types/topics";
+import { IResource } from "@/types/topics";
 import { Trash2 } from "lucide-react";
 
-import { findSubtopicByIdAndDelete } from "@/actions/SubTopic";
+import { findResourceByIdAndDelete } from "@/actions/Resources";
 
 const formSchema = z.object({
   id: z.string(),
 });
 
 type Props = {
-  subtopic: ISubtopic;
+  resource: IResource;
 };
 
-export const DeleteSubtopicForm = ({ subtopic }: Props) => {
+export const DeleteResourceForm = ({ resource }: Props) => {
   const { toast } = useToast();
   const router = useRouter();
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      id: subtopic.id,
+      id: resource.id,
     },
   });
 
@@ -45,10 +45,10 @@ export const DeleteSubtopicForm = ({ subtopic }: Props) => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    const { error } = await findSubtopicByIdAndDelete(subtopic);
+    const { error } = await findResourceByIdAndDelete(resource);
     toast({
       className: "border border-sky-400",
-      title: `Deleted ${subtopic.name}!`,
+      title: `Deleted ${resource.name}!`,
     });
     if (error) {
       toast({
@@ -67,9 +67,9 @@ export const DeleteSubtopicForm = ({ subtopic }: Props) => {
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Delete - {subtopic.name}</DialogTitle>
+          <DialogTitle>Delete - {resource.name}</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete this subtopic?{" "}
+            Are you sure you want to delete this resource?{" "}
           </DialogDescription>
         </DialogHeader>
         <div className="flex items-center space-x-2">

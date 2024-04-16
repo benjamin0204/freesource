@@ -23,39 +23,43 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import { useToast } from "../ui/use-toast";
+} from "../../ui/dialog";
+import { useToast } from "../../ui/use-toast";
 import { useRouter } from "next/navigation";
-import { ITopic } from "@/types/topics";
+import { IResource } from "@/types/topics";
 import { Pencil } from "lucide-react";
-import { findTopicByIdAndUpdate } from "@/actions/Topics";
+import { findResourceByIdAndUpdate } from "@/actions/Resources";
 
 const formSchema = z.object({
   name: z.string().min(2, {
     message: "Name must be at least 2 characters.",
   }),
-  description: z.string().min(2, {
+  type: z.string().min(2, {
     message: "Description must be at least 2 characters.",
   }),
+  link: z.string(),
+  skill_level: z.string(),
   id: z.string(),
   created_by: z.string(),
 });
 
 type Props = {
-  topic: ITopic;
+  resource: IResource;
 };
 
-export const EditTopicForm = ({ topic }: Props) => {
+export const EditResourceForm = ({ resource }: Props) => {
   const { toast } = useToast();
   const router = useRouter();
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: topic.name,
-      description: topic.description,
-      id: topic.id,
-      created_by: topic.created_by,
+      name: resource.name,
+      type: resource.type,
+      link: resource.link,
+      skill_level: resource.skill_level,
+      id: resource.id,
+      created_by: resource.created_by,
     },
   });
 
@@ -63,7 +67,7 @@ export const EditTopicForm = ({ topic }: Props) => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    const { error } = await findTopicByIdAndUpdate(values);
+    const { error } = await findResourceByIdAndUpdate(values);
     if (error) {
       toast({
         variant: "destructive",
@@ -73,7 +77,7 @@ export const EditTopicForm = ({ topic }: Props) => {
     } else {
       toast({
         className: "border border-sky-400",
-        title: `Updated ${topic.name}!`,
+        title: `Updated ${resource.name}!`,
       });
     }
     router.refresh();
@@ -87,7 +91,7 @@ export const EditTopicForm = ({ topic }: Props) => {
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Edit</DialogTitle>
-          <DialogDescription>{topic.name} </DialogDescription>
+          <DialogDescription>{resource.name} </DialogDescription>
         </DialogHeader>
         <div className="flex items-center space-x-2">
           <Form {...form}>
@@ -107,10 +111,36 @@ export const EditTopicForm = ({ topic }: Props) => {
               />
               <FormField
                 control={form.control}
-                name="description"
+                name="type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>Type</FormLabel>
+                    <FormControl>
+                      <Textarea {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="link"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Link</FormLabel>
+                    <FormControl>
+                      <Textarea {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="skill_level"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Skill level</FormLabel>
                     <FormControl>
                       <Textarea {...field} />
                     </FormControl>

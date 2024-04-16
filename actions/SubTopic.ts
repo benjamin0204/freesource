@@ -30,7 +30,14 @@ export const findSubtopicByName = async (name: string) => {
 export const findSubTopicsByTopicId = async (topicId: string | number) => {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
-  return await supabase.from("subTopics").select("*").eq("topic_id", topicId);
+  const { data, error } = await supabase
+    .from("subTopics")
+    .select("*")
+    .eq("topic_id", topicId);
+  console.log(error);
+  if (error) throw new Error("Failed to fetch data");
+
+  return data;
 };
 
 export const findSubtopicByIdAndUpdate = async (formData: FormData) => {

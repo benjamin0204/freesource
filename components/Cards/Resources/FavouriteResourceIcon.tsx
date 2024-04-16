@@ -2,7 +2,7 @@
 import { favouriteResourceById } from "@/actions/Resources";
 import { IResource } from "@/types/topics";
 import { Heart } from "lucide-react";
-import { useToast } from "../ui/use-toast";
+import { useToast } from "../../ui/use-toast";
 import { useRouter } from "next/navigation";
 type Props = {
   resource: IResource;

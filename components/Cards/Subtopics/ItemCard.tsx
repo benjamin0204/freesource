@@ -4,12 +4,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ITopic, ISubtopic } from "@/types/topics";
 import Link from "next/link";
-import { EditTopicForm } from "../EditItemForms/EditTopicForm";
-import { DeleteTopicForm } from "../DeleteForms/DeleteTopicForm";
-import { ISubtopic, ITopic } from "@/types/topics";
-import { EditSubtopicForm } from "../EditItemForms/EditSuobtopic";
-import { DeleteSubtopicForm } from "../DeleteForms/DeleteSubtopicForm";
+import { DeleteTopicForm } from "../Topics/DeleteTopicForm";
+import { EditTopicForm } from "../Topics/EditTopicForm";
+import { DeleteSubtopicForm } from "./DeleteSubtopicForm";
+import { EditSubtopicForm } from "./EditSuobtopic";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type ItemCardProps = {
   item: ITopic | ISubtopic;
@@ -46,6 +47,14 @@ export const ItemCard = ({ item, topicName }: ItemCardProps) => {
           </CardHeader>
         </Card>
       </div>
+    </div>
+  );
+};
+
+export const ItemCardSkeleton = () => {
+  return (
+    <div className="flex flex-col space-y-3 min-h-40 h-full">
+      <Skeleton className=" w-full h-full rounded-xl" />
     </div>
   );
 };
