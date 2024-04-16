@@ -1,8 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { auth, useAuth, useUser } from "@clerk/nextjs";
-import { getAuth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs";
 import { cookies } from "next/headers";
 
 type FormData = {

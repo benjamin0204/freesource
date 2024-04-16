@@ -1,6 +1,6 @@
 import { findSubtopicByName } from "@/actions/SubTopic";
 import { AddNewResourceForm } from "@/components/AddItemForms/AddNewResourceForm";
-import { ResourceCardList } from "@/components/Cards/Resources/FavouriteCardList";
+import { ResourceCardList } from "@/components/Cards/Resources/ResourceCardList";
 import { ItemCardSkeleton } from "@/components/Cards/Subtopics/ItemCard";
 import { Title } from "@/components/Title";
 import { Suspense } from "react";

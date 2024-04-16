@@ -1,16 +1,13 @@
+import { getFavourites } from "@/actions/Fetch";
 import { ResourceCard } from "./ResourceCard";
-import { findresourcesBySubtopicId } from "@/actions/Resources";
+import { IResource } from "@/types/topics";
 
-type Props = {
-  id: string | number;
-};
-
-export const ResourceCardList = async ({ id }: Props) => {
-  const { data: resources } = await findresourcesBySubtopicId(id);
+export const FavouriteCardList = async () => {
+  const favourites = (await getFavourites()) as IResource[];
 
   return (
     <>
-      {resources?.map((resource, index) => {
+      {favourites?.map((resource, index) => {
         return <ResourceCard key={index} resource={resource} />;
       })}
     </>
